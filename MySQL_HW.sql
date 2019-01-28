@@ -93,10 +93,22 @@ JOIN address ON address.address_id=staff.staff_id;
 SELECT * FROM ADDRESS;
 SELECT * FROM STAFF;
 
+SET SQL_SAFE_UPDATES = 0;
+SET SQL_SAFE_UPDATES = 1;
+
+-- UPDATE staff
+-- SET picture = NULL
+-- WHERE first_name = 'Jon';
+
+SELECT * FROM payment;
+
+-- 6b. Use JOIN to display the total amount rung up by each staff member in August of 2005. Use tables staff and payment
+--           LOOK FOR JON
 SELECT first_name, last_name, amount, payment_date
 FROM payment
 JOIN staff ON staff.staff_id=payment.staff_id
-WHERE YEAR(payment_date) = 2005 AND MONTH(payment_date) = 8; 
+WHERE YEAR(payment_date) = 2005 AND MONTH(payment_date) = 8;
+
 
 -- SELECT payment_date FROM payment WHERE YEAR(payment_date) = 2005 AND MONTH(payment_date) = 8;
 
