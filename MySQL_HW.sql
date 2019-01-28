@@ -30,7 +30,7 @@ SELECT * FROM actor WHERE last_name LIKE '%GEN%';
 
 -- 2c) Find all actors whose last names contain the letters LI. Order the rows by last name and first name, respectively
 -- The rows will be sorted by last name first, and the corresponding first names afterward
-SELECT * from actor WHERE last_name LIKE '%LI%'
+SELECT * FROM actor WHERE last_name LIKE '%LI%'
 ORDER BY last_name, first_name;
 
 -- 2d) Using IN, display the country_id and country columns of the following countries: Afghanistan, Bangladesh, and China
@@ -114,4 +114,21 @@ WHERE YEAR(payment_date) = 2005 AND MONTH(payment_date) = 8;
 
 -- staff_id = staff_id/staff_id, amount, payment_date, first_name, last_name
 
-	
+
+-- film columns: film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length,
+-- replacement_cost, rating, special_features, last_update
+
+-- film actor columns: actor_id, film_id, last_update
+
+
+
+-- 6c. List each film and the number of actors who are listed for that film. Use tables film_actor and film. Use inner join.
+SELECT title, COUNT(film_actor.actor_id) AS number_of_actors
+FROM film
+INNER JOIN film_actor ON film.film_id=film_actor.film_id
+GROUP BY (film.title);
+
+select * from film;
+select * from film_actor;
+
+
