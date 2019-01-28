@@ -157,3 +157,22 @@ GROUP BY(last_name) ORDER BY(last_name);
 
 SELECT customer_id, amount FROM payment WHERE customer_id=505;
 SELECT * FROM customer;
+
+
+
+
+-- Use subqueries to display the titles of movies starting with the letters K and Q whose 
+-- language is English.
+
+
+-- film columns: film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length,
+-- replacement_cost, rating, special_features, last_update
+
+
+-- 7a)Use subqueries to display the titles of movies starting with the letters K and Q whose 
+-- language is English.
+-- Display the language table to retrieve the lanuageIid that corresponds with English. language_id = 1 = English
+SELECT * FROM language;
+SELECT * FROM film;
+
+SELECT title, language_id FROM film WHERE (title LIKE 'K%' OR title LIKE 'Q%' AND language_id = 1);
