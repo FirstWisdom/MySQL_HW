@@ -258,5 +258,16 @@ WHERE country='Canada';
 -- SELECT * FROM city;
 
 
+SELECT * FROM film;
+SELECT * FROM category;
+SELECT * FROM film_category;
 
+-- film related columns: film_id, title
+-- category related columns: category_id, name...SELECT category_id FROM category WHERE name = 'Family'; -- answer = 8
+-- film_category related columns: film_id, category_id
+
+
+-- 7d)  Identify all movies categorized as family films.
+SELECT title FROM film WHERE film_id IN (SELECT film_id FROM film_category where category_id IN (SELECT category_id FROM category WHERE
+name = 'Family'))
 
