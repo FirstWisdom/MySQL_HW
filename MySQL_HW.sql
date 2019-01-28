@@ -131,4 +131,12 @@ GROUP BY (film.title);
 select * from film;
 select * from film_actor;
 
+-- hunchback impossible film id = 439
+SELECT * FROM inventory;
 
+-- 6d. How many copies of the film Hunchback Impossible exist in the inventory system?
+-- Retrieve the film_id associated with Hunchback Impossible from the film table. Use SELECT to retrieve the desired data, use COUNT(film_id)
+-- to count the number if film_ids by the filter that will be set later in the query, use FROM to reference the source table, and use
+-- WHERE to filter the table by the desired condition. In this case we want the count of the film_ids that equal 439 only because film_id
+-- 439 represents the film Hunchback Impossible
+SELECT COUNT(film_id) FROM inventory WHERE film_id = 439;
