@@ -69,3 +69,37 @@ SELECT last_name FROM actor;
 -- Use HAVING to filter by a condition; in this case, filter by any last_name value that has a corresponding unique first name count greater than 1
 SELECT last_name, COUNT(last_name) FROM actor GROUP BY last_name HAVING COUNT(last_name) > 1;
 
+SELECT * FROM actor;
+
+-- 4c) The actor HARPO WILLIAMS was accidentally entered in the actor table as GROUCHO WILLIAMS. Write a query to fix the record.
+UPDATE actor
+SET first_name = 'HARPO'
+WHERE first_name = 'GROUCHO' AND last_name = 'WILLIAMS';
+
+-- 4d) In a single query, if the first name of the actor is currently HARPO, change it to GROUCHO. - think of alternative again
+UPDATE actor
+SET first_name = 'GROUCHO'
+WHERE first_name = 'HARPO' AND last_name = 'WILLIAMS';
+
+-- 5a) You cannot locate the schema of the address table. Which query would you use to re-create it?
+SHOW CREATE TABLE address;
+
+-- 6a) Use JOIN to display the first and last names, as well as the address, of each staff member. Use the tables staff and address
+SELECT first_name, last_name, address
+FROM staff
+JOIN address ON address.address_id=staff.staff_id;
+
+-- Confirm number of rows we should expect to see after the tables are joined
+SELECT * FROM ADDRESS;
+SELECT * FROM STAFF;
+
+SELECT first_name, last_name, amount, payment_date
+FROM payment
+JOIN staff ON staff.staff_id=payment.staff_id
+WHERE YEAR(payment_date) = 2005 AND MONTH(payment_date) = 8; 
+
+-- SELECT payment_date FROM payment WHERE YEAR(payment_date) = 2005 AND MONTH(payment_date) = 8;
+
+-- staff_id = staff_id/staff_id, amount, payment_date, first_name, last_name
+
+	
