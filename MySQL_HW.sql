@@ -134,9 +134,26 @@ select * from film_actor;
 -- hunchback impossible film id = 439
 SELECT * FROM inventory;
 
--- 6d. How many copies of the film Hunchback Impossible exist in the inventory system?
+-- 6d. How many copies of the film Hunchback Impossible exist in the inventory system? Answer: 6
 -- Retrieve the film_id associated with Hunchback Impossible from the film table. Use SELECT to retrieve the desired data, use COUNT(film_id)
 -- to count the number if film_ids by the filter that will be set later in the query, use FROM to reference the source table, and use
 -- WHERE to filter the table by the desired condition. In this case we want the count of the film_ids that equal 439 only because film_id
 -- 439 represents the film Hunchback Impossible
 SELECT COUNT(film_id) FROM inventory WHERE film_id = 439;
+
+
+
+
+-- payment columns: payment_id, customer_id, staff_id, rental_id, amount, payment date, last_update
+-- customer columns: customer_id, store_id, first_name, last_name, email, address_id, active, create_date, last_update
+
+-- 6e)Using the tables payment and customer and the JOIN command, list the total paid by each customer. 
+-- List the customers alphabetically by last name:
+SELECT first_name, last_name, SUM(payment.amount) AS total
+FROM customer
+JOIN payment ON payment.customer_id=customer.customer_id
+GROUP BY(last_name) ORDER BY(last_name);
+
+
+SELECT customer_id, amount FROM payment WHERE customer_id=505;
+SELECT * FROM customer;
