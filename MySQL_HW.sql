@@ -129,7 +129,7 @@ WHERE YEAR(payment_date) = 2005 AND MONTH(payment_date) = 8;
 -- staff_id = staff_id/staff_id, amount, payment_date, first_name, last_name
 
 
--- film columns: film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length,
+-- film columns: film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length
 -- replacement_cost, rating, special_features, last_update
 
 -- film actor columns: actor_id, film_id, last_update
@@ -269,5 +269,7 @@ SELECT * FROM film_category;
 
 -- 7d)  Identify all movies categorized as family films.
 SELECT title FROM film WHERE film_id IN (SELECT film_id FROM film_category where category_id IN (SELECT category_id FROM category WHERE
-name = 'Family'))
+name = 'Family'));
 
+-- 7e. Display the most frequently rented movies in descending order.
+SELECT rental_rate FROM film ORDER BY rental_rate DESC;
