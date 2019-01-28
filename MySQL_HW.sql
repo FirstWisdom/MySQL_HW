@@ -1,6 +1,14 @@
--- PLEASE READ BEFORE CONTINUING: To shorten the amount to read for each line, the general steps taken for each problem will be listed here
--- and the problem-specific steps will be notated with each related problem
--- ... create gameplan: 
+-- PLEASE READ BEFORE CONTINUING: To shorten the amount to read for each problem, the general steps taken for each problem will be listed 
+-- here and the problem-specific steps will be notated with each related problem. The general steps here will each be assigned a number and
+-- the number(s) that represent the general steps will be listed in the appropriate position in each problem. 
+	-- Example: 1 = Use SELECT to fetch the desired data 2 = Use * to select all of the columns in the table when using SELECT
+	-- 			3 = Use FROM to reference the source table
+	-- 			Problem: Display all column values in x_table using the customer's first name, 'Bob'
+    -- 			Notes in problem: -- 1, 2, 3. Use WHERE to filter the column values by setting first_name equal to 'Bob'
+	-- 			The above note is equivalent to: Use SELECT to fetch all desired data (represented by 1), Use * to select all of the columns
+    -- 			in the table when using SELECT (represented by 2), Use FROM to reference the source table (represented by 3). Use WHERE to
+    -- 			filter the column values by setting first_name equal to 'Bob'
+--  create gameplan: 
 	-- notate column names in each table to view everything we need in one area and select the columns necessary to execute our objective(s)
 
 
@@ -201,7 +209,8 @@ title = 'Alone Trip'));
 
 -- customer columns: customer_id, store_id, first_name, last_name, email, address_id, active, create_date, last_update
 --         customer_id, first_name, last_name, email
--- 
+-- country columns: country_id, country, last_update
+-- 			country_id, country
 
 SELECT * FROM customer;
 SELECT * FROM country;
