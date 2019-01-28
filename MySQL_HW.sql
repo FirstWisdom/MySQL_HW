@@ -1,3 +1,9 @@
+-- PLEASE READ BEFORE CONTINUING: To shorten the amount to read for each line, the general steps taken for each problem will be listed here
+-- and the problem-specific steps will be notated with each related problem
+-- ... create gameplan: 
+	-- notate column names in each table to view everything we need in one area and select the columns necessary to execute our objective(s)
+
+
 -- Use USE to tell MySQL Workbench to use the data from the sakila schema
 USE sakila;
 
@@ -186,9 +192,16 @@ SELECT title, language_id FROM film WHERE (title LIKE 'K%' OR title LIKE 'Q%' AN
 -- setting title equal to 'Alone Trip'. After the second subquery finishes filtering itself it will initiate a reverse domino effect
 -- to filter the outer subquery and query.
 -- Long explanation: We will use a nested subquery within another subquery. Nested subqueries are run before the outer query or 
--- subquery(s). Use SELECT to get only the name values ... (after long initil explanation) use IN since the subqueries will be returning more than one 
+-- subquery(s). Use SELECT to get only the name values ... (after long initial explanation) use IN since the subqueries will be returning more than one 
 -- value(row). Use SELECT ... and set film_id equal to the nested subquery. Then nested subquery will use the
 SELECT first_name, last_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = (SELECT film_id FROM film WHERE 
 title = 'Alone Trip'));
 
-SELECT title, film_id FROM film WHERE title = 'Alone Trip';  -- film_id = 17
+-- 7c. need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
+
+-- customer columns: customer_id, store_id, first_name, last_name, email, address_id, active, create_date, last_update
+--         customer_id, first_name, last_name, email
+-- 
+
+SELECT * FROM customer;
+SELECT * FROM country;
