@@ -176,3 +176,19 @@ SELECT * FROM language;
 SELECT * FROM film;
 
 SELECT title, language_id FROM film WHERE (title LIKE 'K%' OR title LIKE 'Q%' AND language_id = 1);
+
+
+
+-- 7b. Use subqueries to display all actors who appear in the film Alone Trip
+-- Short explanation: We will use a nested subquery within another subquery. Each subquery will determine/define what to filter each column 
+-- in the outer query or subquery by. The query's actor_id will be filtered by the actor_ids selected in the first subquery. The first 
+-- subquery will be filtered by the selections made in the nested subquery. The nested subquery will filter itself by using WHERE and 
+-- setting title equal to 'Alone Trip'. After the second subquery finishes filtering itself it will initiate a reverse domino effect
+-- to filter the outer subquery and query.
+-- Long explanation: We will use a nested subquery within another subquery. Nested subqueries are run before the outer query or 
+-- subquery(s). Use SELECT to get only the name values ... (after long initil explanation) use IN since the subqueries will be returning more than one 
+-- value(row). Use SELECT ... and set film_id equal to the nested subquery. Then nested subquery will use the
+SELECT first_name, last_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = (SELECT film_id FROM film WHERE 
+title = 'Alone Trip'));
+
+SELECT title, film_id FROM film WHERE title = 'Alone Trip';  -- film_id = 17
