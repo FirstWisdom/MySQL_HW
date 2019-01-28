@@ -9,7 +9,7 @@
     -- 			in the table when using SELECT (represented by 2), Use FROM to reference the source table (represented by 3). Use WHERE to
     -- 			filter the column values by setting first_name equal to 'Bob'
 --  create gameplan: 
-	-- notate column names in each table to view everything we need in one area and select the columns necessary to execute our objective(s)
+	-- notate column names in each table to view everything we may need in one area and select the columns necessary to execute our objective(s)
 
 
 -- Use USE to tell MySQL Workbench to use the data from the sakila schema
@@ -166,7 +166,7 @@ SELECT COUNT(film_id) FROM inventory WHERE film_id = 439;
 SELECT first_name, last_name, SUM(payment.amount) AS total
 FROM customer
 JOIN payment ON payment.customer_id=customer.customer_id
-GROUP BY(last_name) ORDER BY(last_name);
+GROUP BY (last_name) ORDER BY(last_name);
 
 
 SELECT customer_id, amount FROM payment WHERE customer_id=505;
@@ -208,9 +208,55 @@ title = 'Alone Trip'));
 -- 7c. need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
 
 -- customer columns: customer_id, store_id, first_name, last_name, email, address_id, active, create_date, last_update
---         customer_id, first_name, last_name, email
+		-- address_id, first_name, last_name, email
+-- address columns: address_id, address, address2, district, city_id, postal_code, phone, location, last_update
+		-- address_id, city_id
+-- city columns: city_id, city, country_id, last_update
+		-- city_id, country_id
 -- country columns: country_id, country, last_update
--- 			country_id, country
+		-- country_id, country
 
-SELECT * FROM customer;
-SELECT * FROM country;
+-- 7c. need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
+
+-- 1) SELECT city_id, country JOIN city.country_id=country.country_id
+-- 2) SELECT address_id, country JOIN city.city_id=address.city_id
+-- 3) SELECT first_name, last_name, email JOIN address.address_id=customer.address_id GROUP BY country='Canada'
+
+-- 7c. need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
+SELECT first_name, last_name, email FROM customer
+JOIN address ON customer.address_id=address.address_id
+JOIN city ON address.city_id=city.city_id
+JOIN country ON city.country_id=country.country_id
+WHERE country='Canada';
+
+
+-- SELECT first_name, last_name, email FROM customer
+-- JOIN address ON customer.address_id=address.address_id 
+-- (SELECT address_id FROM address
+-- JOIN city ON address.city_id=city.city_id 
+-- WHERE address_id IN
+-- (SELECT city_id FROM city
+-- JOIN country ON city.country_id=country.country_id
+-- WHERE country='Canada')));
+
+
+
+-- SELECT first_name, last_name, email FROM customer
+-- JOIN address ON customer.address_id=address.address_id 
+-- IN
+-- (SELECT * FROM address
+-- JOIN city ON address.city_id=city.city_id 
+-- IN
+-- (SELECT * FROM city
+-- JOIN country ON city.country_id=country.country_id
+-- WHERE country='Canada'));
+
+
+-- SELECT * FROM customer;
+-- SELECT * FROM country;
+-- SELECT * FROM address;
+-- SELECT * FROM city;
+
+
+
+
