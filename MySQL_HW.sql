@@ -179,7 +179,7 @@ SELECT * FROM customer;
 -- language is English.
 
 
--- film columns: film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length,
+-- film columns: film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length
 -- replacement_cost, rating, special_features, last_update
 
 
@@ -273,3 +273,34 @@ name = 'Family'));
 
 -- 7e. Display the most frequently rented movies in descending order.
 SELECT rental_rate FROM film ORDER BY rental_rate DESC;
+
+
+-- 7f. Write a query to display how much business, in dollars, each store brought in.
+SELECT * FROM payment;
+SELECT * FROM store; 
+SELECT * FROM inventory;
+SELECT * FROM rental;
+
+
+-- inventory columns: inventory_id, film_id, store_id, last_update
+		-- store_id
+-- rental columns: rental_id, inventory_id, customer_id, (staff and dates)
+  
+-- 1) -- store columns: store_id, manager_staff_id, address_id, last_update
+		-- store_id
+-- 2) customer columns: customer_id, store_id, first_name, last_name, email, address_id, active, create_date, last_update
+		-- customer_id, store_id
+-- 3) payment columns: payment_id, customer_id, staff_id, rental_id, amount, payment_date, last_update
+		-- customer_id, amount 
+
+        
+SELECT store_id, SUM(amount) AS total_business FROM payment 
+WHERE store_id IN
+(SELECT customer_id FROM customer 
+WHERE store_id IN 
+(SELECT store_id FROM store));
+
+
+-- GROUP BY store_id;
+
+-- 7f. Write a query to display how much business, in dollars, each store brought in.
