@@ -275,104 +275,11 @@ name = 'Family'));
 -- 7e. Display the most frequently rented movies in descending order.
 SELECT rental_rate FROM film ORDER BY rental_rate DESC;
 
--- 7f. Write a query to display how much business, in dollars, each store brought in
 
-
-
-SELECT * FROM store;
-SELECT * FROM inventory;
-SELECT * FROM customer;
-SELECT * FROM payment;
-SELECT * FROM film_category;
-SELECT * FROM rental;
-
-
--- film category columns: film_id, category_id, last_update
--- rental columns: rental_id, rental_date, inventory_id, customer_id, staff_id, (dates)
-		-- rental_id, inventory_id, customer_id, staff_id
--- inventory columns: inventory_id, film_id, store_id, last_update
-		-- store_id, inventory_id, film_id
-        
-                
--- 7f. Write a query to display how much business, in dollars, each store brought in
-
--- store columns: store_id, manager_staff_id, address_id, last_update
-		-- store_id, address_id
--- payment columns: payment_id, customer_id, staff_id, rental_id, amount, (dates)
-		-- payment_id, customer_id, rental_id, amount
-
--- customers columns: customer_id, store_id, first_name, last_name, email, address_id, (active and dates)
-		-- store_id, customer_id, address_id
-
--- store and customer using address_id
--- payment and customer using store_id
-
-
-
-SELECT store_id, SUM(amount) AS total_business FROM payment WHERE customer_id IN
-(SELECT customer_id FROM customer WHERE store_id IN
-(SELECT store_id FROM store WHERE store_id=1));
-
-
-SELECT DISTINCT TABLE_NAME
-FROM INFORMATION_SCHEMA.COLUMNS
-WHERE COLUMN_NAME IN ('')
-AND TABLE_SCHEMA = 'sakila';
-
-SELECT * FROM store;
-SELECT * FROM address;
-SELECT * FROM city;
-SELECT * FROM country;
-
-
+-- 7f. Write a query to display how much business, in dollars, each store brought in.
 SELECT * FROM sales_by_store;
-
--- store name = city, country
--- store.address_id = 1, 2
--- address.address_id=address.city_id = store.1 = 300, store.2 = 576
--- city.1 = Lethbridge...city.2 = Woodridge...country_id.1 = 20 ...country_id2 = 8
--- country.1 = Canada...country.2 = Australia
--- store_id = 1 is Lethbridge, Canada...store_id = 2 is Woodridge, Australia
+SELECT store, CONCAT('$', total_sales) AS business_total_sales FROM sales_by_store;
 
 
+-- 7g. Write a query to display for each store its store ID, city, and country.
 
-
-
-
-
-
-
-
-
-
-
--- 7f. Write a query to display how much business, in dollars, each store brought in.
-SELECT * FROM payment;
-SELECT * FROM store; 
-SELECT * FROM inventory;
-SELECT * FROM rental;
-
-
--- inventory columns: inventory_id, film_id, store_id, last_update
-		-- store_id
--- rental columns: rental_id, inventory_id, customer_id, (staff and dates)
-  
--- 1) -- store columns: store_id, manager_staff_id, address_id, last_update
-		-- store_id
--- 2) customer columns: customer_id, store_id, first_name, last_name, email, address_id, active, create_date, last_update
-		-- customer_id, store_id
--- 3) payment columns: payment_id, customer_id, staff_id, rental_id, amount, payment_date, last_update
-		-- customer_id, amount 
-
-        
-SELECT store_id, SUM(amount) AS total_business FROM payment 
-WHERE store_id IN
-(SELECT customer_id FROM customer 
-WHERE store_id IN 
-(SELECT store_id FROM store)
-);
-
-
--- GROUP BY store_id;
-
--- 7f. Write a query to display how much business, in dollars, each store brought in.
