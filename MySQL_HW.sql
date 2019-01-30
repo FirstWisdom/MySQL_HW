@@ -277,9 +277,57 @@ SELECT rental_rate FROM film ORDER BY rental_rate DESC;
 
 
 -- 7f. Write a query to display how much business, in dollars, each store brought in.
-SELECT * FROM sales_by_store;
 SELECT store, CONCAT('$', total_sales) AS business_total_sales FROM sales_by_store;
 
 
 -- 7g. Write a query to display for each store its store ID, city, and country.
+SELECT * FROM sales_by_store;
 
+-- store name = city, country
+-- store.address_id = 1, 2
+-- address.address_id=address.city_id = store.1 = 300, store.2 = 576
+-- city.1 = Lethbridge...city.2 = Woodridge...country_id.1 = 20 ...country_id2 = 8
+-- country.1 = Canada...country.2 = Australia
+-- store_id = 1 is Lethbridge, Canada...store_id = 2 is Woodridge, Australia
+
+
+-- 7g. Write a query to display for each store its store ID, city, and country.
+-- store in sales_by_store,	store_id in store,	city in city	country in country
+
+-- sales_by_store columns: 	store, manager, total_sales
+-- store columns:			store_id, manager_staff_id, address_id, last_update
+-- city columns:			city_id, city, country_id, last_update
+-- country columns:			country_id, country, last_update
+
+-- 7g. Write a query to display for each store its store ID, city, and country.
+SELECT store_id, city, country
+FROM store
+JOIN address
+ON store.address_id=address.address_id
+JOIN city ON address.city_id=city.city_id
+JOIN country ON city.country_id=country.country_id;
+
+-- 7h. List the top five genres in gross revenue in descending order
+-- category columns:		category_id, name [of genre], last_update
+-- film_category columns:	category_id, film_id, last_update
+-- inventory columns:		inventory_id, film_id, store_id, last_update
+-- payment columns:			payment_id, customer_id, staff_id, rental_id, amount, payment_date, last_update
+-- rental columns:			rental_id, rental_date, inventory_id, customer_id, return_date, staff_id, last_update
+
+SELECT * FROM category; -- category_id, name
+SELECT * FROM film_category; -- category_id, film_id
+SELECT * FROM inventory; -- film_id, inventory_id
+SELECT * FROM rental; -- inventory_id, rental_id
+SELECT * FROM payment; -- rental_id, amount
+
+-- 7h. List the top five genres in gross revenue in descending order
+
+SELECT name, SUM(amount) AS gross_revenue
+FROM category
+JOIN film_category ON category.category_id=film_category.category_id
+JOIN inventory ON film_category.film_id=inventory.film_id
+JOIN rental ON inventory.inventory_id=rental.inventory_id
+JOIN payment ON rental.rental_id=payment.rental_id
+GROUP BY name
+ORDER BY gross_revenue DESC
+LIMIT 5;
