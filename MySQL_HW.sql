@@ -6,32 +6,33 @@ USE sakila;
 -- the table from which to retrieve the data, and LIMIT to constrain the number of rows returned to the first 10 rows.
 SELECT * FROM actor LIMIT 10;
 
--- 1a) Display the first and last names of all actors from the actor table
+-- 1a. Display the first and last names of all actors from the table actor.
 -- Use SELECT to retrieve the desired data, and specify first_name and last_name to return only the data in the first_name and
 -- last_name columns. Use FROM to specify the table from which to retrieve the data.
 SELECT first_name, last_name FROM actor;
 
--- 1b)  Display the first and last name of each actor in a single column in upper case letters. Name the column Actor Name
+-- 1b. Display the first and last name of each actor in a single column in upper case letters. Name the column Actor Name.
 -- USE SELECT to retrieve the desired data. Use CONCAT to combine string values and ' ' to put a space between the first_name and 
 -- last_name values to be combined. Use AS to assign an alias to the column	and FROM to specify the table from which to retrieve the data. 
 -- CONCAT_WS can be used as an alternative for CONCAT 
 SELECT CONCAT(first_name, ' ', last_name) AS 'Actor Name' FROM actor;
 
--- 2a) 2a. Find the ID number, first name, and last name of an actor when we only know the first name is "Joe."
+-- 2a. You need to find the ID number, first name, and last name of an actor, of whom you know only the first name, "Joe." 
+-- 2a. What is one query would you use to obtain this information?
 -- Use SELECT to retrieve the desired data, specify the actor_id, first_name, and last_name to return only the data in
 -- those columns. Use FROM to specify the table from which to retrieve the data. Use WHERE to filter the results in the first_name column 
 -- by a condition, and set first_name equal to 'Joe' to define the condition.
 SELECT actor_id, first_name, last_name FROM actor
 WHERE first_name = 'JOE';
 
--- 2b) Find all actors whose last name contain the letters 'GEN' 
+-- 2b. Find all actors whose last name contain the letters GEN:
 -- Use SELECT to retrieve the desired data, place * in the area directly after SELECT to select all fields from the table, use FROM to
 -- specify the table from which to retrieve the data, and use WHERE to filter the results in the last_name column by a condition. Use LIKE 
 -- to connect last_name to '%GEN%' to define the condition. Use the wildcard '%' to match any number of characters, both before and after
 -- 'Gen', to return all last_name values that contain the letters 'GEN'
 SELECT * FROM actor WHERE last_name LIKE '%GEN%';
 
--- 2c) Find all actors whose last names contain the letters LI. Order the rows by last name and first name, respectively
+-- 2c. Find all actors whose last names contain the letters LI. This time, order the rows by last name and first name, in that order:
 -- Use SELECT to retrieve the desired data, place an * directly after SELECT to select all fields from the table, and use WHERE to filter 
 -- the results by a condition. Connect last_name with '%LI%' using LIKE to define the condition, and use the wildcard '%' to match any 
 -- number of characters, both before and after 'Li', to return all rows that contain 'Li' in the last_name column. Use ORDER BY to sort
@@ -46,29 +47,31 @@ SELECT * FROM actor WHERE last_name LIKE '%GEN%';
 SELECT * FROM actor WHERE last_name LIKE '%LI%'
 ORDER BY last_name, first_name;
 
--- 2d) Using IN, display the country_id and country columns of the following countries: Afghanistan, Bangladesh, and China
+-- 2d. Using IN, display the country_id and country columns of the following countries: Afghanistan, Bangladesh, and China:
 -- Use SELECT to retrieve the desired data, and specify country_id and country to return only the data in the columns country_id and 
 -- country. Use FROM to specify the table from which to retrieve the data, and use WHERE to filter the results by a condition. Use IN to 
 -- determine if the specified value, country, matches any value(s) in the set of values that follows IN to define the condition for WHERE.
 SELECT country_id, country FROM country WHERE country IN('Afghanistan', 'Bangladesh', 'China');
 
--- 3a) Create a column in the table actor named description and use the data type BLOB
+-- 3a. You want to keep a description of each actor. You don't think you will be performing queries on a description, so create a column in
+-- 3a. the table actor named description and use the data type BLOB (Make sure to research the type BLOB, as the difference between it and 
+-- 3a. VARCHAR are significant).
 -- Use ALTER TABLE to change the structure of the table actor. Use ADD COLUMN to add a column to actor with the given name, description,
 -- assigned to the immediate right of COLUMN. Place BLOB after the assigned table name to assign the new description column's values the 
 -- BLOB type
 ALTER TABLE actor
 ADD COLUMN description BLOB;
 
--- 3b) Use ALTER TABLE to allow changes in the actor table's structure. Use DROP COLUMN to delete the description column in actor.
+-- 3b. Very quickly you realize that entering descriptions for each actor is too much effort. Delete the description column.
 ALTER TABLE actor DROP COLUMN description;
 
--- 4a) List the last names of actors, as well as how many actors have that last name
+-- 4a. List the last names of actors, as well as how many actors have that last name.
 -- Use SELECT to retrieve the desired data, specify last name to return and use the function COUNT() on last name to only return the values
 -- in the last_name and the count of each last name. Use FROM to specify the table in which to retrieve the data, and use GROUP BY to
 -- divide the rows returned from the SELECT statement into groups. The groups will be grouped by the values in the last_name column.
 SELECT last_name, COUNT(last_name) FROM actor GROUP BY last_name;
 
--- 4b) List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors
+-- 4b. List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors
 -- Use SELECT to retrieve the desired data, specify last name to return and use the function COUNT() on last name to only return the values
 -- in the last_name and the count of each last name. Use FROM to specify the table in which to retrieve the data, and use GROUP BY to
 -- divide the rows returned from the SELECT statement into groups. The groups will be grouped by the values in the last_name column. Use
@@ -77,7 +80,7 @@ SELECT last_name, COUNT(last_name) FROM actor GROUP BY last_name;
 -- If a last_name value has one or zero actors with the last_name value then the last_name value must not be returned.
 SELECT last_name, COUNT(last_name) FROM actor GROUP BY last_name HAVING COUNT(last_name) > 1;
 
--- 4c) The actor HARPO WILLIAMS was accidentally entered in the actor table as GROUCHO WILLIAMS. Write a query to fix the record.
+-- 4c. The actor HARPO WILLIAMS was accidentally entered in the actor table as GROUCHO WILLIAMS. Write a query to fix the record.
 -- Use UPDATE to enable modification of the table actor. Use set to specify which column to modify and what to assign the value(s) to. Use
 -- WHERE to filter the returned values only if the values satisfy a specified condition. Set first_name equal to 'GROUCHO' and last_name
 -- to 'WILLIAMS' to define part of the condition that must be satisfied. Use the boolean operator AND to return the results only if both
@@ -86,7 +89,8 @@ UPDATE actor
 SET first_name = 'HARPO'
 WHERE first_name = 'GROUCHO' AND last_name = 'WILLIAMS';
 
--- 4d) In a single query, if the first name of the actor is currently HARPO, change it to GROUCHO.
+-- 4d. Perhaps we were too hasty in changing GROUCHO to HARPO. It turns out that GROUCHO was the correct name after all! In a single query,
+-- 4d. if the first name of the actor is currently HARPO, change it to GROUCHO.
 -- Use UPDATE to enable modification of the table, actor. Use SET to specify which column to modify and what to assign the value(s) to. Use
 -- WHERE to filter the returned values only if the values satisfy a specified condition. Set first_name equal to 'HARPO' and last_name
 -- to 'WILLIAMS' to define part of the condition that must be satisfied. Use the boolean operator AND to return the results only if both
@@ -95,17 +99,17 @@ UPDATE actor
 SET first_name = 'GROUCHO'
 WHERE first_name = 'HARPO' AND last_name = 'WILLIAMS';
 
--- 5a) You cannot locate the schema of the address table. Which query would you use to re-create it?
+-- 5a. You cannot locate the schema of the address table. Which query would you use to re-create it?
 -- Use SHOW CREATE TABLE to return the CREATE TABLE statement that created the table address. Enter what is returned into a schema
 -- of your choice.
 SHOW CREATE TABLE address;
 
--- 6a) Use JOIN to display the first and last names, as well as the address, of each staff member. Use the tables staff and address
+-- 6a. Use JOIN to display the first and last names, as well as the address, of each staff member. Use the tables staff and address:
 SELECT first_name, last_name, address
 FROM staff
 JOIN address ON address.address_id=staff.staff_id;
 
--- 6b. Use JOIN to display the total amount rung up by each staff member in August of 2005. Use tables staff and payment
+-- 6b. Use JOIN to display the total amount rung up by each staff member in August of 2005. Use tables staff and payment.
 -- Use SELECT to retrieve the desired data, specify first_name, last_name, amount, and payment_date to return only the data in those
 -- columns, and use FROM to specify the table in which to retrieve the data. Use JOIN to link the data between the tables staff and payment,
 -- and use ON to specify the column names for the join keys in both tables. Use the syntax table1.column=table2.column to specify the 
@@ -129,7 +133,8 @@ FROM film
 INNER JOIN film_actor ON film.film_id=film_actor.film_id
 GROUP BY (film.title);
 
--- 6d. How many copies of the film Hunchback Impossible exist in the inventory system? Answer: 6
+-- 6d. How many copies of the film Hunchback Impossible exist in the inventory system? 
+-- Answer: 6
 -- Retrieve the film_id associated with Hunchback Impossible from the film table to use for the problem.
 SELECT * FROM film WHERE title = 'Hunchback Impossible'; 
 -- Use SELECT to retrieve the desired data, use COUNT(film_id) to count the number of film_ids, and use FROM to specify the table in which
@@ -138,7 +143,8 @@ SELECT * FROM film WHERE title = 'Hunchback Impossible';
 -- condition returned the value 6, which means six copies of the film 'Hunchback Impossible' existed in the inventory system. 
 SELECT COUNT(film_id) FROM inventory WHERE film_id = 439;
 
--- 6e)Using the tables payment and customer and the JOIN command, list the total paid by each customer. 
+-- 6e. Using the tables payment and customer and the JOIN command, list the total paid by each customer. List the customers alphabetically 
+-- 6e. by last name:
 -- List the customers alphabetically by last name.
 -- Use SELECT to retrieve the desired data. Specify first_name, last_name, and SUM(payment.amount)to retrieve only the data in the columns
 -- first_name, last_name, and the sum of the amount values in the payment column. Use AS to assign SUM(payment.amount) the alias total. Use
@@ -151,7 +157,9 @@ FROM customer
 JOIN payment ON payment.customer_id=customer.customer_id
 GROUP BY (last_name) ORDER BY(last_name);
 
--- 7a)Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.	
+-- 7a. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. As an unintended consequence, films starting with the 
+-- 7a. letters K and Q have also soared in popularity. Use subqueries to display the titles of movies starting with the letters K and Q whose 
+-- 7a. language is English.
 -- Display the language table to retrieve the lanuageIid that corresponds with English. language_id = 1 = English
 SELECT * FROM language;
 -- Use SELECT to retrieve the desired data, and specify title and language_id to return only data in those columns. Use FROM to specify
@@ -162,10 +170,10 @@ SELECT * FROM language;
 -- satisfies one of the previous conditions will only be returned if the movie's language is English.
 SELECT title, language_id FROM film WHERE (title LIKE 'K%' OR title LIKE 'Q%' AND language_id = 1);
 
--- 7b. Use subqueries to display all actors who appear in the film Alone Trip
--- Nutshell explanation: We will use a nested subquery within another subquery. Each subquery will determine/define what to filter each column 
--- in the outer query or subquery by. The query's actor_id will be filtered by the actor_ids selected in the first subquery. The first 
--- subquery will be filtered by the selections made in the nested subquery. The nested subquery will filter itself by using WHERE and 
+-- 7b. Use subqueries to display all actors who appear in the film Alone Trip.
+-- General explanation: We will use a nested subquery within another subquery. Each subquery will determine/define what to filter each 
+-- column in the outer query or subquery by. The query's actor_id will be filtered by the actor_ids selected in the first subquery. The 
+-- first subquery will be filtered by the selections made in the nested subquery. The nested subquery will filter itself by using WHERE and 
 -- setting title equal to 'Alone Trip'. After the second subquery finishes filtering itself it will initiate a reverse domino effect
 -- to filter the outer subquery and query.
 -- Step-by-step explanation: We will use a nested subquery within another subquery. Nested subqueries are run before the outer query or 
@@ -178,7 +186,8 @@ SELECT title, language_id FROM film WHERE (title LIKE 'K%' OR title LIKE 'Q%' AN
 SELECT first_name, last_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = (SELECT film_id FROM film WHERE 
 title = 'Alone Trip'));
 
--- 7c. need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
+-- 7c. You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian 
+-- 7c. customers. Use joins to retrieve this information.
 -- Use SELECT to retrieve the desired data, and specify first_name, last_name, email to return data only from those columns. Use FROM to
 -- specify the table in which to retrieve the data from and use a total of three JOINS to link data from four tables. Use ON to specify
 -- the column names for the different join keys used in each individual JOIN. Use the table_name.column_name to specify the columns to
@@ -190,7 +199,8 @@ JOIN city ON address.city_id=city.city_id
 JOIN country ON city.country_id=country.country_id
 WHERE country='Canada';
 
--- 7d)  Identify all movies categorized as family films.
+-- 7d. Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies 
+-- 7d categorized as family films.
 -- Nutshell explanation: We will use a nested subquery within another subquery. Each subquery will determine/define what to filter each column 
 -- in the outer query or subquery by. The query's film_id will be filtered by the actor_ids selected in the first subquery. The first 
 -- subquery will be filtered by the selections made in the nested subquery. The nested subquery will filter itself by using WHERE and 
@@ -219,10 +229,6 @@ SELECT rental_rate FROM film ORDER BY rental_rate DESC;
 -- last_name values to be combined
 SELECT store, CONCAT('$', total_sales) AS business_total_sales FROM sales_by_store;
 
-
--- 7g. Write a query to display for each store its store ID, city, and country.
-SELECT * FROM sales_by_store;
-
 -- 7g. Write a query to display for each store its store ID, city, and country.
 -- Use SELECT to retrieve the desired data, and specify store_id, city, and country to retrieve data from only those columns. Use FROM to
 -- specify the table in which to retrieve teh data from. Use a total of three joins to link four tables together. Use three ONs to specify
@@ -234,7 +240,7 @@ JOIN address ON store.address_id=address.address_id
 JOIN city ON address.city_id=city.city_id
 JOIN country ON city.country_id=country.country_id;
 
--- 7h. List the top five genres in gross revenue in descending order
+-- 7h. List the top five genres in gross revenue in descending order.
 -- Use SELECT to retrieve the desired data, and specify store_id, city, and country to retrieve data from only those columns. Use FROM to
 -- specify the table in which to retrieve teh data from. Use a total of three joins to link four tables together. Use three ONs to specify
 -- the different join keys used in each individual JOIN in all of the tables. Use the table_name.column_name to specify the columns to
@@ -249,7 +255,8 @@ GROUP BY name
 ORDER BY gross_revenue DESC
 LIMIT 5;
 
--- 8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. 
+-- 8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. Use the 
+-- 8a. solution from the problem above to create a view. If you haven't solved 7h, you can substitute another query to create a view.
 -- Use the solution from the problem above to create a view.
 -- Follow the exact same steps as the solution to problem 7h, except above the first line insert 'CREATE VIEW'. Place top_five_genres
 -- to the immediate left of CREATE VIEW to name the view top_five_genres and use AS to assign top_five_genres as an alias to the query
