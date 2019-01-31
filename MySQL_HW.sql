@@ -129,7 +129,6 @@ FROM film
 INNER JOIN film_actor ON film.film_id=film_actor.film_id
 GROUP BY (film.title);
 
-SELECT * FROM film WHERE title = 'Hunchback Impossible';
 -- 6d. How many copies of the film Hunchback Impossible exist in the inventory system? Answer: 6
 -- Retrieve the film_id associated with Hunchback Impossible from the film table to use for the problem.
 SELECT * FROM film WHERE title = 'Hunchback Impossible'; 
@@ -137,39 +136,54 @@ SELECT * FROM film WHERE title = 'Hunchback Impossible';
 -- to retrieve the data from. Use WHERE to  by the filter that will be set later in the query, use FROM to reference the source table, and use
 -- WHERE to filter the table by a condition and define that condition by setting film_id equal to 439. The only value that satisfied the
 -- condition returned the value 6, which means six copies of the film 'Hunchback Impossible' existed in the inventory system. 
-
 SELECT COUNT(film_id) FROM inventory WHERE film_id = 439;
 
 -- 6e)Using the tables payment and customer and the JOIN command, list the total paid by each customer. 
--- List the customers alphabetically by last name:
+-- List the customers alphabetically by last name.
+-- Use SELECT to retrieve the desired data. Specify first_name, last_name, and SUM(payment.amount)to retrieve only the data in the columns
+-- first_name, last_name, and the sum of the amount values in the payment column. Use AS to assign SUM(payment.amount) the alias total. Use
+-- FROM to specify the table in which to retrieve the data from and use JOIN to link the data between the payment and customer tables. Use 
+-- ON to specify the column names for join keys in both tables. Set payment.customer_id=customer.customer_id to join the tables on those
+-- columns. Use GROUP BY to divide the rows returned from the SELECT statement into groups of last_name values. Use ORDER BY to sort the
+-- last_name values alphabetically.
 SELECT first_name, last_name, SUM(payment.amount) AS total
 FROM customer
 JOIN payment ON payment.customer_id=customer.customer_id
 GROUP BY (last_name) ORDER BY(last_name);
 
--- 7a)Use subqueries to display the titles of movies starting with the letters K and Q whose 
--- language is English.
+-- 7a)Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.	
 -- Display the language table to retrieve the lanuageIid that corresponds with English. language_id = 1 = English
 SELECT * FROM language;
-SELECT * FROM film;
-
+-- Use SELECT to retrieve the desired data, and specify title and language_id to return only data in those columns. Use FROM to specify
+-- the table in which to retrieve the data from, and WHERE to set a condition that must be satisfied. Use parenthesis to group the
+-- condition definition parts together otherwise SQL will not run all of the conditions listed. Use LIKE to use the % wildcard after both
+-- the letter 'K' and the letter 'Q' to retrieve all movie titles that start with the letters 'K' or 'Q'. Use OR so that only one of the 
+-- movie title starting letter conditions need to be true to move on to the second test. Use AND to make sure that any value that 
+-- satisfies one of the previous conditions will only be returned if the movie's language is English.
 SELECT title, language_id FROM film WHERE (title LIKE 'K%' OR title LIKE 'Q%' AND language_id = 1);
 
-
-
 -- 7b. Use subqueries to display all actors who appear in the film Alone Trip
--- Short explanation: We will use a nested subquery within another subquery. Each subquery will determine/define what to filter each column 
+-- Nutshell explanation: We will use a nested subquery within another subquery. Each subquery will determine/define what to filter each column 
 -- in the outer query or subquery by. The query's actor_id will be filtered by the actor_ids selected in the first subquery. The first 
 -- subquery will be filtered by the selections made in the nested subquery. The nested subquery will filter itself by using WHERE and 
 -- setting title equal to 'Alone Trip'. After the second subquery finishes filtering itself it will initiate a reverse domino effect
 -- to filter the outer subquery and query.
--- Long explanation: We will use a nested subquery within another subquery. Nested subqueries are run before the outer query or 
--- subquery(s). Use SELECT to get only the name values ... (after long initial explanation) use IN since the subqueries will be returning more than one 
--- value(row). Use SELECT ... and set film_id equal to the nested subquery. Then nested subquery will use the
+-- Step-by-step explanation: We will use a nested subquery within another subquery. Nested subqueries are run before the outer query or 
+-- subquery(s). Use SELECT to retrieve the desired data, and specify first_name and last_name to only retrieve data from those columns.
+-- Use FROM to specify the table in which to retrieve the data and use WHERE to set a condition that must be satisfied. Use IN to determine
+-- if a specified value is returned by a subquery since WHERE cannot be used when multiple values are returned from subqueries. Use the
+-- same syntax from the query (SELECT, FROM, WHERE), but set the condition equal to the nested subquery since the nested subquery will
+-- return only one value. Set title equal to alone trip to define the first condition that must be met. There are three conditions that
+-- must be met for a value to be returned with the nested subquery's condition being the first requirement to be met.
 SELECT first_name, last_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = (SELECT film_id FROM film WHERE 
 title = 'Alone Trip'));
 
 -- 7c. need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
+-- Use SELECT to retrieve the desired data, and specify first_name, last_name, email to return data only from those columns. Use FROM to
+-- specify the table in which to retrieve the data from and use a total of three JOINS to link data from four tables. Use ON to specify
+-- the column names for the different join keys used in each individual JOIN. Use the table_name.column_name to specify the columns to
+-- merge the tables on. Finally, use WHERE to create a condition that must be met and set country equal to 'Canada' to return data that
+-- is only related to Canada.
 SELECT first_name, last_name, email FROM customer
 JOIN address ON customer.address_id=address.address_id
 JOIN city ON address.city_id=city.city_id
@@ -177,10 +191,25 @@ JOIN country ON city.country_id=country.country_id
 WHERE country='Canada';
 
 -- 7d)  Identify all movies categorized as family films.
+-- Nutshell explanation: We will use a nested subquery within another subquery. Each subquery will determine/define what to filter each column 
+-- in the outer query or subquery by. The query's film_id will be filtered by the actor_ids selected in the first subquery. The first 
+-- subquery will be filtered by the selections made in the nested subquery. The nested subquery will filter itself by using WHERE and 
+-- setting title equal to 'Family'. After the second subquery finishes filtering itself it will initiate a reverse domino effect
+-- to filter the outer subquery and query.
+-- Step-by-step explanation: We will use a nested subquery within another subquery. Nested subqueries are run before the outer query or 
+-- subquery(s). Use SELECT to retrieve the desired data, and specify titl to only retrieve data from those the title column.
+-- Use FROM to specify the table in which to retrieve the data and use WHERE to set a condition that must be satisfied. Use IN to determine
+-- if a specified value is returned by a subquery since WHERE cannot be used when multiple values are returned from subqueries. Use the
+-- same syntax from the query (SELECT, FROM, WHERE), and use IN to determine if a specified value is returned by the nested subquery since
+-- the nested subquery also returns multiple values. Set title equal to 'Family' to define the first condition that must be met. There are 
+-- three conditions that must be met for a value to be returned with the nested subquery's condition being the first requirement to be met.
 SELECT title FROM film WHERE film_id IN (SELECT film_id FROM film_category where category_id IN (SELECT category_id FROM category WHERE
 name = 'Family'));
 
 -- 7e. Display the most frequently rented movies in descending order.
+-- Use SELECT to retrieve the desired data, specify rental_rate to retrieve only data in the rental_rate column, and use FROM to specify
+-- the table in which to retrieve the data from.  Use ORDER BY to sort the resulting set by rental rate, and use DESC to sort in descending
+-- order.
 SELECT rental_rate FROM film ORDER BY rental_rate DESC;
 
 
