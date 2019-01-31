@@ -53,44 +53,51 @@ ORDER BY last_name, first_name;
 -- set of values that follows IN to define the condition for WHERE.
 SELECT country_id, country FROM country WHERE country IN('Afghanistan', 'Bangladesh', 'China');
 
--- 3a) create a column in the table actor named description and use the data type BLOB
+-- 3a) Create a column in the table actor named description and use the data type BLOB
 -- Use ALTER TABLE to change the structure of the table actor. Use ADD COLUMN to add a column to actor with the given name, description,
 -- assigned right after COLUMN. Place BLOB after the assigned table name to assign the new description column's values the BLOB type
 ALTER TABLE actor
 ADD COLUMN description BLOB;
 
--- 3b) wDelete the description column
+-- 3b) Use ALTER TABLE to allow changes in the actor table's structure. Use DROP COLUMN to delete the description column in actor.
 ALTER TABLE actor DROP COLUMN description;
 
-SELECT * FROM ACTOR;
-
-SELECT last_name FROM actor;
-
-#SELECT UNIQUE(last_name) FROM actor; <--------------question for class. other than common use syntax, is there a disadvantage of using '#' for notes?
-
--- SELECT COUNT(last_name) FROM actor;
-
--- SELECT last_name.COUNT(*) AS lastn_uc FROM actor GROUP BY last_name; -- HAVING lastn_uc>1;
--- 4a) 4a. List the last names of actors, as well as how many actors have that last name
+-- 4a) List the last names of actors, as well as how many actors have that last name
+-- Use SELECT to retrieve the desired data, specify last name to return and use the function COUNT() on last name to only return the values
+-- in the last_name and the count of each last name. Use FROM to specify the table in which to retrieve the data, and use GROUP BY to
+-- divide the rows returned from the SELECT statement into groups. The groups will be grouped by the values in the last_name column.
 SELECT last_name, COUNT(last_name) FROM actor GROUP BY last_name;
 
 -- 4b) List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors
--- Use HAVING to filter by a condition; in this case, filter by any last_name value that has a corresponding unique first name count greater than 1
+-- Use SELECT to retrieve the desired data, specify last name to return and use the function COUNT() on last name to only return the values
+-- in the last_name and the count of each last name. Use FROM to specify the table in which to retrieve the data, and use GROUP BY to
+-- divide the rows returned from the SELECT statement into groups. The groups will be grouped by the values in the last_name column. Use
+-- HAVING to specify the filter conditions for the groups specified in GROUP BY. Use HAVING to define the condition that must be
+-- satisfied to run the query; in this case each last_name value returned must have at least more than one actor that have that value.
+-- If a last_name value has one or zero actors with the last_name value then the last_name value must not be returned.
 SELECT last_name, COUNT(last_name) FROM actor GROUP BY last_name HAVING COUNT(last_name) > 1;
 
-SELECT * FROM actor;
-
 -- 4c) The actor HARPO WILLIAMS was accidentally entered in the actor table as GROUCHO WILLIAMS. Write a query to fix the record.
+-- Use UPDATE to enable modification of the table actor. Use set to specify which column to modify and what to assign the value(s) to. Use
+-- WHERE to filter the returned values only if the values satisfy a specified condition. Set first_name equal to 'GROUCHO' and last_name
+-- to 'WILLIAMS' to define part of the condition that must be satisfied. Use the boolean operator AND to return the results only if both
+-- conditions are true. If at least one of the conditions is false then 'HARPO' will not be changed to 'GROUCHO'.
 UPDATE actor
 SET first_name = 'HARPO'
 WHERE first_name = 'GROUCHO' AND last_name = 'WILLIAMS';
 
--- 4d) In a single query, if the first name of the actor is currently HARPO, change it to GROUCHO. - think of alternative again
+-- 4d) In a single query, if the first name of the actor is currently HARPO, change it to GROUCHO.
+-- Use UPDATE to enable modification of the table, actor. Use SET to specify which column to modify and what to assign the value(s) to. Use
+-- WHERE to filter the returned values only if the values satisfy a specified condition. Set first_name equal to 'HARPO' and last_name
+-- to 'WILLIAMS' to define part of the condition that must be satisfied. Use the boolean operator AND to return the results only if both
+-- conditions are true. If at least one of the conditions is false then the 'GROUCHO' will not be changed to 'HARPO'.
 UPDATE actor
 SET first_name = 'GROUCHO'
 WHERE first_name = 'HARPO' AND last_name = 'WILLIAMS';
 
 -- 5a) You cannot locate the schema of the address table. Which query would you use to re-create it?
+-- Use SHOW CREATE TABLE to return the CREATE TABLE statement that created the table address. Enter what is returned into a schema
+-- of your choice.
 SHOW CREATE TABLE address;
 
 -- 6a) Use JOIN to display the first and last names, as well as the address, of each staff member. Use the tables staff and address
@@ -98,63 +105,40 @@ SELECT first_name, last_name, address
 FROM staff
 JOIN address ON address.address_id=staff.staff_id;
 
--- Confirm number of rows we should expect to see after the tables are joined
-SELECT * FROM ADDRESS;
-SELECT * FROM STAFF;
-
-SET SQL_SAFE_UPDATES = 0;
-SET SQL_SAFE_UPDATES = 1;
-
--- UPDATE staff
--- SET picture = NULL
--- WHERE first_name = 'Jon';
-
-SELECT * FROM payment;
-
 -- 6b. Use JOIN to display the total amount rung up by each staff member in August of 2005. Use tables staff and payment
---           LOOK FOR JON
+-- Use SELECT to retrieve the desired data, specify first_name, last_name, amount, and payment_date to return only the data in those
+-- columns, and use FROM to specify the table in which to retrieve the data. Use JOIN to link the data between the tables staff and payment,
+-- and use ON to specify the column names for the join keys in both tables. Use the syntax table1.column=table2.column to specify the 
+-- columns the two tables will be joined on. Use WHERE to filter the results by a condition. Assign the YEAR() function to 2005 to return
+-- the year part for a given date and assign the MONTH() function to 8 to return the month of the date to define part of the condition. Use
+-- the logical operator AND complete the condition definition and only return the values where both stated conditions are true.
 SELECT first_name, last_name, amount, payment_date
 FROM payment
 JOIN staff ON staff.staff_id=payment.staff_id
 WHERE YEAR(payment_date) = 2005 AND MONTH(payment_date) = 8;
 
-
--- SELECT payment_date FROM payment WHERE YEAR(payment_date) = 2005 AND MONTH(payment_date) = 8;
-
--- staff_id = staff_id/staff_id, amount, payment_date, first_name, last_name
-
-
--- film columns: film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length
--- replacement_cost, rating, special_features, last_update
-
--- film actor columns: actor_id, film_id, last_update
-
-
-
 -- 6c. List each film and the number of actors who are listed for that film. Use tables film_actor and film. Use inner join.
+-- Use SELECT to retrieve the desired data, specify title and use COUNT() to return only the data in the title column and the count of
+-- the actor_ids. Use AS to assign COUNT(film_actor.actor_id) an alias and use the table_name.column_name syntax to make sure the values
+-- being counted are coming from the film_actor table. Use FROM the specify the table in which to retrieve the data from, and use INNER 
+-- JOIN to select the data that have matching values in both tables. Use ON to specify the column names for join keys in both tables. Use
+-- Use the syntax table1.column=table2.column to specify the columns the two tables will be joined on and use GROUP BY to divide the
+-- data returned from the SELECT statement into groups of the title column values in the table film.
 SELECT title, COUNT(film_actor.actor_id) AS number_of_actors
 FROM film
 INNER JOIN film_actor ON film.film_id=film_actor.film_id
 GROUP BY (film.title);
 
-select * from film;
-select * from film_actor;
-
--- hunchback impossible film id = 439
-SELECT * FROM inventory;
-
+SELECT * FROM film WHERE title = 'Hunchback Impossible';
 -- 6d. How many copies of the film Hunchback Impossible exist in the inventory system? Answer: 6
--- Retrieve the film_id associated with Hunchback Impossible from the film table. Use SELECT to retrieve the desired data, use COUNT(film_id)
--- to count the number if film_ids by the filter that will be set later in the query, use FROM to reference the source table, and use
--- WHERE to filter the table by the desired condition. In this case we want the count of the film_ids that equal 439 only because film_id
--- 439 represents the film Hunchback Impossible
+-- Retrieve the film_id associated with Hunchback Impossible from the film table to use for the problem.
+SELECT * FROM film WHERE title = 'Hunchback Impossible'; 
+-- Use SELECT to retrieve the desired data, use COUNT(film_id) to count the number of film_ids, and use FROM to specify the table in which
+-- to retrieve the data from. Use WHERE to  by the filter that will be set later in the query, use FROM to reference the source table, and use
+-- WHERE to filter the table by a condition and define that condition by setting film_id equal to 439. The only value that satisfied the
+-- condition returned the value 6, which means six copies of the film 'Hunchback Impossible' existed in the inventory system. 
+
 SELECT COUNT(film_id) FROM inventory WHERE film_id = 439;
-
-
-
-
--- payment columns: payment_id, customer_id, staff_id, rental_id, amount, payment date, last_update
--- customer columns: customer_id, store_id, first_name, last_name, email, address_id, active, create_date, last_update
 
 -- 6e)Using the tables payment and customer and the JOIN command, list the total paid by each customer. 
 -- List the customers alphabetically by last name:
@@ -162,21 +146,6 @@ SELECT first_name, last_name, SUM(payment.amount) AS total
 FROM customer
 JOIN payment ON payment.customer_id=customer.customer_id
 GROUP BY (last_name) ORDER BY(last_name);
-
-
-SELECT customer_id, amount FROM payment WHERE customer_id=505;
-SELECT * FROM customer;
-
-
-
-
--- Use subqueries to display the titles of movies starting with the letters K and Q whose 
--- language is English.
-
-
--- film columns: film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length
--- replacement_cost, rating, special_features, last_update
-
 
 -- 7a)Use subqueries to display the titles of movies starting with the letters K and Q whose 
 -- language is English.
@@ -201,66 +170,11 @@ SELECT first_name, last_name FROM actor WHERE actor_id IN (SELECT actor_id FROM 
 title = 'Alone Trip'));
 
 -- 7c. need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
-
--- customer columns: customer_id, store_id, first_name, last_name, email, address_id, active, create_date, last_update
-		-- address_id, first_name, last_name, email
--- address columns: address_id, address, address2, district, city_id, postal_code, phone, location, last_update
-		-- address_id, city_id
--- city columns: city_id, city, country_id, last_update
-		-- city_id, country_id
--- country columns: country_id, country, last_update
-		-- country_id, country
-
--- 7c. need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
-
--- 1) SELECT city_id, country JOIN city.country_id=country.country_id
--- 2) SELECT address_id, country JOIN city.city_id=address.city_id
--- 3) SELECT first_name, last_name, email JOIN address.address_id=customer.address_id GROUP BY country='Canada'
-
--- 7c. need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
 SELECT first_name, last_name, email FROM customer
 JOIN address ON customer.address_id=address.address_id
 JOIN city ON address.city_id=city.city_id
 JOIN country ON city.country_id=country.country_id
 WHERE country='Canada';
-
-
--- SELECT first_name, last_name, email FROM customer
--- JOIN address ON customer.address_id=address.address_id 
--- (SELECT address_id FROM address
--- JOIN city ON address.city_id=city.city_id 
--- WHERE address_id IN
--- (SELECT city_id FROM city
--- JOIN country ON city.country_id=country.country_id
--- WHERE country='Canada')));
-
-
-
--- SELECT first_name, last_name, email FROM customer
--- JOIN address ON customer.address_id=address.address_id 
--- IN
--- (SELECT * FROM address
--- JOIN city ON address.city_id=city.city_id 
--- IN
--- (SELECT * FROM city
--- JOIN country ON city.country_id=country.country_id
--- WHERE country='Canada'));
-
-
--- SELECT * FROM customer;
--- SELECT * FROM country;
--- SELECT * FROM address;
--- SELECT * FROM city;
-
-
-SELECT * FROM film;
-SELECT * FROM category;
-SELECT * FROM film_category;
-
--- film related columns: film_id, title
--- category related columns: category_id, name...SELECT category_id FROM category WHERE name = 'Family'; -- answer = 8
--- film_category related columns: film_id, category_id
-
 
 -- 7d)  Identify all movies categorized as family films.
 SELECT title FROM film WHERE film_id IN (SELECT film_id FROM film_category where category_id IN (SELECT category_id FROM category WHERE
@@ -277,22 +191,6 @@ SELECT store, CONCAT('$', total_sales) AS business_total_sales FROM sales_by_sto
 -- 7g. Write a query to display for each store its store ID, city, and country.
 SELECT * FROM sales_by_store;
 
--- store name = city, country
--- store.address_id = 1, 2
--- address.address_id=address.city_id = store.1 = 300, store.2 = 576
--- city.1 = Lethbridge...city.2 = Woodridge...country_id.1 = 20 ...country_id2 = 8
--- country.1 = Canada...country.2 = Australia
--- store_id = 1 is Lethbridge, Canada...store_id = 2 is Woodridge, Australia
-
-
--- 7g. Write a query to display for each store its store ID, city, and country.
--- store in sales_by_store,	store_id in store,	city in city	country in country
-
--- sales_by_store columns: 	store, manager, total_sales
--- store columns:			store_id, manager_staff_id, address_id, last_update
--- city columns:			city_id, city, country_id, last_update
--- country columns:			country_id, country, last_update
-
 -- 7g. Write a query to display for each store its store ID, city, and country.
 SELECT store_id, city, country
 FROM store
@@ -300,19 +198,6 @@ JOIN address
 ON store.address_id=address.address_id
 JOIN city ON address.city_id=city.city_id
 JOIN country ON city.country_id=country.country_id;
-
--- 7h. List the top five genres in gross revenue in descending order
--- category columns:		category_id, name [of genre], last_update
--- film_category columns:	category_id, film_id, last_update
--- inventory columns:		inventory_id, film_id, store_id, last_update
--- payment columns:			payment_id, customer_id, staff_id, rental_id, amount, payment_date, last_update
--- rental columns:			rental_id, rental_date, inventory_id, customer_id, return_date, staff_id, last_update
-
-SELECT * FROM category; -- category_id, name
-SELECT * FROM film_category; -- category_id, film_id
-SELECT * FROM inventory; -- film_id, inventory_id
-SELECT * FROM rental; -- inventory_id, rental_id
-SELECT * FROM payment; -- rental_id, amount
 
 -- 7h. List the top five genres in gross revenue in descending order
 
@@ -344,5 +229,3 @@ SELECT * FROM top_five_genres;
 
 -- 8c. You find that you no longer need the view top_five_genres. Write a query to delete it.
 DROP VIEW top_five_genres;
-
-SELECT * FROM top_five_genres;
