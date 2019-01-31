@@ -7,53 +7,59 @@ USE sakila;
 SELECT * FROM actor LIMIT 10;
 
 -- 1a) Display the first and last names of all actors from the actor table
--- Use SELECT to fetch the desired data, specify first_name and last_name to fetch only the data associated with the first_name and
--- last_name columns and FROM to reference the source table
+-- Use SELECT to retrieve the desired data, and specify first_name and last_name to return only the data associated with the first_name and
+-- last_name columns. Use FROM to specify the table from which to retrieve the data.
 SELECT first_name, last_name FROM actor;
 
 -- 1b)  Display the first and last name of each actor in a single column in upper case letters. Name the column Actor Name
 -- USE SELECT to retrieve the desired data. Use CONCAT to combine string values and ' ' to put a space between the first_name and 
--- last_name values to be combined. Use AS to create the column's name and FROM to specify the table from which to retrieve the data. 
+-- last_name values to be combined. Use AS to assign an alias to the column	and FROM to specify the table from which to retrieve the data. 
 -- CONCAT_WS can be used as an alternative for CONCAT 
 SELECT CONCAT(first_name, ' ', last_name) AS 'Actor Name' FROM actor;
 
 -- 2a) 2a. Find the ID number, first name, and last name of an actor when we only know the first name is "Joe."
--- Use SELECT to fetch the desired data, specify the actor_id, first_name, and last_name to fetch only the data associated with those
--- columns. Use FROM to reference the source table and use WHERE to filter the results in the first_name column to display only the
+-- Use SELECT to retrieve the desired data, specify the actor_id, first_name, and last_name to return only the data associated with
+-- those columns. Use FROM to specify the table from which to retrieve the data. Use WHERE to filter the results in the first_name column 
+-- by a condition, and set first_name equal to 'Joe' to define the condition.
 -- rows that have the string value Joe
 SELECT actor_id, first_name, last_name FROM actor
 WHERE first_name = 'JOE';
 
 -- 2b) Find all actors whose last name contain the letters 'GEN' 
--- Use SELECT to fetch the desired data, * to select all columns in the table, WHERE to filter the results in the last_name column using %%
--- as wildcards
+-- Use SELECT to retrieve the desired data, place * in the area directly after SELECT to select all fields from the table, use FROM to
+-- specify the table from which to retrieve the data, and use WHERE to filter the results in the last_name column by a condition. Connect 
+-- last_name to %GEN% to define the condition. Use the wildcard '%' to match any number of characters, both before and after 'Gen', to 
+-- return all last_name values that contain the letters 'GEN'
 SELECT * FROM actor WHERE last_name LIKE '%GEN%';
 
 -- 2c) Find all actors whose last names contain the letters LI. Order the rows by last name and first name, respectively
--- The rows will be sorted by last name first, and the corresponding first names afterward
+-- Use SELECT to retrieve the desired data, place an * directly after SELECT to select all fields from the table, and use WHERE to filter 
+-- the results by a condition. Connect last_name with '%LI%' using LIKE to define the condition, and use the wildcard '%' to match any 
+-- number of characters, both before and after 'Li', to return all rows that contain 'Li' in the last_name column. Use ORDER BY to sort
+-- the result set by the last_name values and the first name values afterward. Both the last_name column and the first_name column 
+-- will be alphabetically sorted from A-Z. The results will be ordered by the last_name column first, and once the last_name column is done
+-- sorting itself the first_name column will sort the table that was returned after the last_name column finished sorting. The dual sorting
+-- will create a more accurate alphabetically ordered result. When two or more last_name values are the same, ORDER BY last_name does not
+-- orders the last_name values randomly. By sorting the first_name column with ORDER BY, the last_name values are assigned a structure that
+-- to follow. The corresponding values in the first_name column will determine where the last_name values are placed. The result is the last_name
+-- column values are no longer placed randomly in relation to matching values. They have specific areas they must be in contingent upon
+-- the corresponding first_name column values which are also sorted alphabetically. 
 SELECT * FROM actor WHERE last_name LIKE '%LI%'
 ORDER BY last_name, first_name;
 
 -- 2d) Using IN, display the country_id and country columns of the following countries: Afghanistan, Bangladesh, and China
+-- Use SELECT to retrieve the desired data, specify country_id and country to return only the data in the columns country_id and country,
+-- and use WHERE to filter the results by a condition. Use IN to determine if the specified value, country, matches any value(s) in the
+-- set of values that follows IN to define the condition for WHERE.
 SELECT country_id, country FROM country WHERE country IN('Afghanistan', 'Bangladesh', 'China');
 
-SELECT * FROM country;
-
 -- 3a) create a column in the table actor named description and use the data type BLOB
+-- Use ALTER TABLE to change the structure of the table actor. Use ADD COLUMN to add a column to actor with the given name, description,
+-- assigned right after COLUMN. Place BLOB after the assigned table name to assign the new description column's values the BLOB type
 ALTER TABLE actor
 ADD COLUMN description BLOB;
 
-SELECT * FROM actor;
-
-SET SQL_SAFE_UPDATES = 0;
-
--- DELETE FROM actor WHERE description;
-
-SET SQL_SAFE_UPDATES = 1;
-
-SELECT * FROM actor;
-
--- Delete the description column
+-- 3b) wDelete the description column
 ALTER TABLE actor DROP COLUMN description;
 
 SELECT * FROM ACTOR;
@@ -65,6 +71,8 @@ SELECT last_name FROM actor;
 -- SELECT COUNT(last_name) FROM actor;
 
 -- SELECT last_name.COUNT(*) AS lastn_uc FROM actor GROUP BY last_name; -- HAVING lastn_uc>1;
+-- 4a) 4a. List the last names of actors, as well as how many actors have that last name
+SELECT last_name, COUNT(last_name) FROM actor GROUP BY last_name;
 
 -- 4b) List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors
 -- Use HAVING to filter by a condition; in this case, filter by any last_name value that has a corresponding unique first name count greater than 1
@@ -337,4 +345,4 @@ SELECT * FROM top_five_genres;
 -- 8c. You find that you no longer need the view top_five_genres. Write a query to delete it.
 DROP VIEW top_five_genres;
 
-SELECT * FROM top_give_genres;
+SELECT * FROM top_five_genres;
