@@ -212,8 +212,11 @@ name = 'Family'));
 -- order.
 SELECT rental_rate FROM film ORDER BY rental_rate DESC;
 
-
 -- 7f. Write a query to display how much business, in dollars, each store brought in.
+-- Use SELECT to retrieve the desired data. Specify store and CONCAT('$', total_sales) to retrieve only the data from the store and 
+-- total_sales columns. Use CONCAT to combine '$' with each value in the total_sales column. Use AS to assign an allias to the new column
+-- and use FROM the specify the table in which to retrieve the data from. 
+-- last_name values to be combined
 SELECT store, CONCAT('$', total_sales) AS business_total_sales FROM sales_by_store;
 
 
@@ -221,15 +224,21 @@ SELECT store, CONCAT('$', total_sales) AS business_total_sales FROM sales_by_sto
 SELECT * FROM sales_by_store;
 
 -- 7g. Write a query to display for each store its store ID, city, and country.
+-- Use SELECT to retrieve the desired data, and specify store_id, city, and country to retrieve data from only those columns. Use FROM to
+-- specify the table in which to retrieve teh data from. Use a total of three joins to link four tables together. Use three ONs to specify
+-- the different join keys used in each individual JOIN in all of the tables. Use the table_name.column_name to specify the columns to
+-- merge the tables on.
 SELECT store_id, city, country
 FROM store
-JOIN address
-ON store.address_id=address.address_id
+JOIN address ON store.address_id=address.address_id
 JOIN city ON address.city_id=city.city_id
 JOIN country ON city.country_id=country.country_id;
 
 -- 7h. List the top five genres in gross revenue in descending order
-
+-- Use SELECT to retrieve the desired data, and specify store_id, city, and country to retrieve data from only those columns. Use FROM to
+-- specify the table in which to retrieve teh data from. Use a total of three joins to link four tables together. Use three ONs to specify
+-- the different join keys used in each individual JOIN in all of the tables. Use the table_name.column_name to specify the columns to
+-- merge the tables on.
 SELECT name, SUM(amount) AS gross_revenue
 FROM category
 JOIN film_category ON category.category_id=film_category.category_id
@@ -242,6 +251,9 @@ LIMIT 5;
 
 -- 8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. 
 -- Use the solution from the problem above to create a view.
+-- Follow the exact same steps as the solution to problem 7h, except above the first line insert 'CREATE VIEW'. Place top_five_genres
+-- to the immediate left of CREATE VIEW to name the view top_five_genres and use AS to assign top_five_genres as an alias to the query
+-- that follows. 
 CREATE VIEW top_five_genres AS 
 SELECT name, SUM(amount) AS gross_revenue
 FROM category
@@ -254,7 +266,11 @@ ORDER BY gross_revenue DESC
 LIMIT 5;
 
 -- 8b. How would you display the view that you created in 8a?
+-- Use SELECT to retrieve the desired data, place an * after SELECT to select all fields in the table, and use FROM to specify the table
+-- in which to retrieve the data from.
 SELECT * FROM top_five_genres;
 
 -- 8c. You find that you no longer need the view top_five_genres. Write a query to delete it.
+-- Use DROP to to enable a removal/deletion of whatever follows DROP, use VIEW to indicate that what will be removed/deleted is a VIEW, and
+-- state the name of the VIEW that is to be removed/deleted.
 DROP VIEW top_five_genres;
