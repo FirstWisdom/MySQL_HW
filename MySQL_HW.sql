@@ -1,24 +1,9 @@
--- PLEASE READ BEFORE CONTINUING: To shorten the amount to read for each problem, the general steps taken for each problem will be listed 
--- here and the problem-specific steps will be notated with each related problem. The general steps here will each be assigned a number and
--- the number(s) that represent the general steps will be listed in the appropriate position in each problem. 
-	-- Example: 1 = Use SELECT to specify the columns of interest and fetch the desired data 2 = Use * to select all of the columns in the 
-	-- 			table when using SELECT
-	-- 			3 = Use FROM to reference the source table
-	-- 			Problem: Display all column values in x_table using the customer's first name, 'Bob'
-    -- 			Notes in problem: -- 1, 2, 3. Use WHERE to filter the column values by setting first_name equal to 'Bob'
-	-- 			The above note is equivalent to: Use SELECT to fetch all desired data (represented by 1), Use * to select all of the columns
-    -- 			in the table when using SELECT (represented by 2), Use FROM to reference the source table (represented by 3). Use WHERE to
-    -- 			filter the column values by setting first_name equal to 'Bob'
---  create gameplan: 
-	-- notate column names in each table to view everything we may need in one area and select the columns necessary to execute our objective(s)
-
-
 -- Use USE to tell MySQL Workbench to use the data from the sakila schema
 USE sakila;
 
--- Preview first 10 rows to confirm information column titles may not suggest (ex. first_name and last_name column values are all 
--- capitalized). Use SELECT to fetch the desired data, * to select all of the columns in the table, FROM to reference the source table, and
--- LIMIT to display only the first 10 rows
+-- Preview the first 10 rows to detect information that the column titles may not suggest (ex. first_name and last_name column values are
+-- all capitalized). Use SELECT to retrieve the desired data, * to select all fields from the table, FROM to specify the table from which 
+-- to retrieve the data, and LIMIT to constrain the number of rows returned to the first 10 rows
 SELECT * FROM actor LIMIT 10;
 
 -- 1a) Display the first and last names of all actors from the actor table
@@ -27,8 +12,9 @@ SELECT * FROM actor LIMIT 10;
 SELECT first_name, last_name FROM actor;
 
 -- 1b)  Display the first and last name of each actor in a single column in upper case letters. Name the column Actor Name
--- USE SELECT to fetch the desired data. Use CONCAT to merge string values and ' ' to put a space between the first names and last names.
--- Use AS to create the column's name and FROM to reference the source table
+-- USE SELECT to retrieve the desired data. Use CONCAT to combine string values and ' ' to put a space between the first_name and 
+-- last_name values to be combined. Use AS to create the column's name and FROM to specify the table from which to retrieve the data. 
+-- CONCAT_WS can be used as an alternative for CONCAT 
 SELECT CONCAT(first_name, ' ', last_name) AS 'Actor Name' FROM actor;
 
 -- 2a) 2a. Find the ID number, first name, and last name of an actor when we only know the first name is "Joe."
