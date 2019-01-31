@@ -2,12 +2,12 @@
 USE sakila;
 
 -- Preview the first 10 rows to detect information that the column titles may not suggest (ex. first_name and last_name column values are
--- all capitalized). Use SELECT to retrieve the desired data, * to select all fields from the table, FROM to specify the table from which 
--- to retrieve the data, and LIMIT to constrain the number of rows returned to the first 10 rows
+-- all capitalized). Use SELECT to retrieve the desired data, place an * after SELECT to select all fields from the table, FROM to specify
+-- the table from which to retrieve the data, and LIMIT to constrain the number of rows returned to the first 10 rows.
 SELECT * FROM actor LIMIT 10;
 
 -- 1a) Display the first and last names of all actors from the actor table
--- Use SELECT to retrieve the desired data, and specify first_name and last_name to return only the data associated with the first_name and
+-- Use SELECT to retrieve the desired data, and specify first_name and last_name to return only the data in the first_name and
 -- last_name columns. Use FROM to specify the table from which to retrieve the data.
 SELECT first_name, last_name FROM actor;
 
@@ -18,18 +18,17 @@ SELECT first_name, last_name FROM actor;
 SELECT CONCAT(first_name, ' ', last_name) AS 'Actor Name' FROM actor;
 
 -- 2a) 2a. Find the ID number, first name, and last name of an actor when we only know the first name is "Joe."
--- Use SELECT to retrieve the desired data, specify the actor_id, first_name, and last_name to return only the data associated with
+-- Use SELECT to retrieve the desired data, specify the actor_id, first_name, and last_name to return only the data in
 -- those columns. Use FROM to specify the table from which to retrieve the data. Use WHERE to filter the results in the first_name column 
 -- by a condition, and set first_name equal to 'Joe' to define the condition.
--- rows that have the string value Joe
 SELECT actor_id, first_name, last_name FROM actor
 WHERE first_name = 'JOE';
 
 -- 2b) Find all actors whose last name contain the letters 'GEN' 
 -- Use SELECT to retrieve the desired data, place * in the area directly after SELECT to select all fields from the table, use FROM to
--- specify the table from which to retrieve the data, and use WHERE to filter the results in the last_name column by a condition. Connect 
--- last_name to %GEN% to define the condition. Use the wildcard '%' to match any number of characters, both before and after 'Gen', to 
--- return all last_name values that contain the letters 'GEN'
+-- specify the table from which to retrieve the data, and use WHERE to filter the results in the last_name column by a condition. Use LIKE 
+-- to connect last_name to '%GEN%' to define the condition. Use the wildcard '%' to match any number of characters, both before and after
+-- 'Gen', to return all last_name values that contain the letters 'GEN'
 SELECT * FROM actor WHERE last_name LIKE '%GEN%';
 
 -- 2c) Find all actors whose last names contain the letters LI. Order the rows by last name and first name, respectively
@@ -38,24 +37,25 @@ SELECT * FROM actor WHERE last_name LIKE '%GEN%';
 -- number of characters, both before and after 'Li', to return all rows that contain 'Li' in the last_name column. Use ORDER BY to sort
 -- the result set by the last_name values and the first name values afterward. Both the last_name column and the first_name column 
 -- will be alphabetically sorted from A-Z. The results will be ordered by the last_name column first, and once the last_name column is done
--- sorting itself the first_name column will sort the table that was returned after the last_name column finished sorting. The dual sorting
--- will create a more accurate alphabetically ordered result. When two or more last_name values are the same, ORDER BY last_name does not
--- orders the last_name values randomly. By sorting the first_name column with ORDER BY, the last_name values are assigned a structure that
--- to follow. The corresponding values in the first_name column will determine where the last_name values are placed. The result is the last_name
--- column values are no longer placed randomly in relation to matching values. They have specific areas they must be in contingent upon
--- the corresponding first_name column values which are also sorted alphabetically. 
+-- sorting itself the first_name column will sort the table that was returned after the last_name column finished sorting by the first_name
+ -- values. The dual sorting will create a more accurate alphabetically ordered result. When two or more last_name values are the same, 
+ -- ORDER BY orders the last_name values randomly. By sorting the first_name column with ORDER BY, the last_name values 
+ -- are assigned a structure to follow. The corresponding values in the first_name column will determine where the last_name values 
+ -- are placed. The result is the last_name column values are no longer placed randomly relative to matching values. They have specific 
+ -- areas they must be in contingent upon the corresponding first_name column values which are also sorted alphabetically. 
 SELECT * FROM actor WHERE last_name LIKE '%LI%'
 ORDER BY last_name, first_name;
 
 -- 2d) Using IN, display the country_id and country columns of the following countries: Afghanistan, Bangladesh, and China
--- Use SELECT to retrieve the desired data, specify country_id and country to return only the data in the columns country_id and country,
--- and use WHERE to filter the results by a condition. Use IN to determine if the specified value, country, matches any value(s) in the
--- set of values that follows IN to define the condition for WHERE.
+-- Use SELECT to retrieve the desired data, and specify country_id and country to return only the data in the columns country_id and 
+-- country. Use FROM to specify the table from which to retrieve the data, and use WHERE to filter the results by a condition. Use IN to 
+-- determine if the specified value, country, matches any value(s) in the set of values that follows IN to define the condition for WHERE.
 SELECT country_id, country FROM country WHERE country IN('Afghanistan', 'Bangladesh', 'China');
 
 -- 3a) Create a column in the table actor named description and use the data type BLOB
 -- Use ALTER TABLE to change the structure of the table actor. Use ADD COLUMN to add a column to actor with the given name, description,
--- assigned right after COLUMN. Place BLOB after the assigned table name to assign the new description column's values the BLOB type
+-- assigned to the immediate right of COLUMN. Place BLOB after the assigned table name to assign the new description column's values the 
+-- BLOB type
 ALTER TABLE actor
 ADD COLUMN description BLOB;
 
